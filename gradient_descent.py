@@ -23,7 +23,9 @@ def linear_regression(learning_rate_list, epoch_list, is_alpha):
     Y = df_scaled['RevenuePerDay']  
     
     mse_map = {feature: [] for feature in features}  
-    for feature in features:
+    fig, axes = plt.subplots(2, 3, figsize=(10, 6))
+    axes = axes.ravel()
+    for i,feature in enumerate(features):
         X=df_scaled[feature]
         n = float(len(X)) 
         for param in learning_rate_list if is_alpha else epoch_list:
@@ -40,16 +42,14 @@ def linear_regression(learning_rate_list, epoch_list, is_alpha):
             mse = metrics.mean_squared_error(Y, y_pred)
             mse_map[feature].append(mse)
             
-    plt.figure(figsize=(10, 6))
-    
-    for feature in features:
-        plt.plot(learning_rate_list if is_alpha else epoch_list, mse_map[feature], marker='o', label=feature)
-     
-    plt.xlabel("Learning Rate (alpha)" if is_alpha else "Epochs", fontsize=12)
-    plt.ylabel("Mean Squared Error (MSE)", fontsize=12)
-    plt.title("MSE vs Learning Rate" if is_alpha else "MSE vs Epochs", fontsize=14)
-    plt.legend()
-    plt.grid(True)
+        axes[i].plot(learning_rate_list if is_alpha else epoch_list, mse_map[feature], linestyle='-', markersize=5, linewidth=2, label=feature)
+        axes[i].set_xlabel("Learning Rate (alpha)" if is_alpha else "Epochs")
+        axes[i].set_ylabel("MSE")
+        axes[i].set_title(f"MSE vs {feature}")
+        axes[i].legend()
+        axes[i].grid()
+    plt.suptitle("MSE vs Learning Rate" if is_alpha else "MSE vs Epochs", fontsize=16)
+    plt.tight_layout(rect=[0, 0, 1, 0.96])
     plt.show()
     if(is_alpha):
         print("\n","MSE vs Learning Rate")
@@ -61,5 +61,5 @@ def linear_regression(learning_rate_list, epoch_list, is_alpha):
         for key, value in mse_map.items():
             print(f"{key}: {value}")
 
-linear_regression([0.0001, 0.001, 0.01, 0.1, 0.3, 0.9], [100], True)  
-linear_regression([0.001], [100,200,1000], False) 
+linear_regression([0.0001, 0.001, 0.01, 0.1, 0.3,0.9], [100], True)  
+linear_regression([0.1], [100,200,1000], False) 
