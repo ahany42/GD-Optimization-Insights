@@ -1,4 +1,4 @@
-# Gradient Descent from Scratch
+# Gradient Descent Implementation 
 
 This project implements **Gradient Descent from scratch** to analyze how different hyperparameters—**number of epochs** and **learning rate**—affect the **Mean Square Error (MSE)**.
 
